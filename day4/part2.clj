@@ -1,3 +1,8 @@
+;; My approach consumes quite a lot of memory
+;; To run it properly, you might have to increase
+;; the jvm stack size. I've done it running
+;; `clj -J-Xss515m ...`
+
 (ns part2
   (:require [clojure.string :as str])
   (:use clojure.set)
@@ -38,7 +43,7 @@
   (memoize 
     (fn
       ([] [0])
-      ([n & xs] (println (count xs)) (conj (apply dp xs) (+ 1 (reduce + (take-last n (apply dp xs))))))
+      ([n & xs] (conj (apply dp xs) (+ 1 (reduce + (take-last n (apply dp xs))))))
       )
     )
   )
@@ -46,6 +51,4 @@
 (def lines (ReadLines))
 (def sets (map SplitLineIntoSets lines))
 (def values (map value sets))
-;;;;(take 2 [1])
-;;(reduce + (apply dp values))
-(apply dp (take 120 values))
+(reduce + (apply dp values))
